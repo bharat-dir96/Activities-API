@@ -98,26 +98,20 @@ app
     .post(async (req,res) =>{
         const body = req.body;
 
-        const result = await Package.create({
-            title: body.title,
-            origin: body.origin,
-            destination: body.destination,
-            duration: body.duration,
-            departure: body.departure,
-            upcoming_date: body.upcoming_date,
-            code: body.code,
-            price: body.price,
-
-        })
-        return res.status(201).json({status: "Success", result: result});
+        try{
+            const result = await Package.create(body);
+            return res.status(201).json({status: "Success", result: result});
+        } catch(err) {
+            return res.status(400).json({ error: err.message})
+        }
     })
 
 
 app
     .route('/api/package/:code')
     .get(async (req,res) => {
-        const package = await Package.find({code: req.params.code});
-        if(package.length == 0 ){
+        const package = await Package.findOne({code: req.params.code});
+        if(!package){
             return res.status(404).json({error: "Package not found"});
         }
         return res.json(package);
@@ -125,22 +119,22 @@ app
     .patch(async (req,res) =>{
         const body = req.body;
 
-        const result = await Package.updateOne({code: req.params.code}, { $set: body});
+        const updated = await Package.findOneAndUpdate({code: req.params.code}, { $set: body}, {new: true});
 
-        if(!result.matchedCount){
+        if(!updated){
             return res.status(404).json({error: "Package not found"});
         }
 
-        return res.status(201).json({status: "success", result});
+        return res.status(201).json({status: "success", updated: updated});
     })
     .delete(async (req,res) =>{
-        const result = await Package.deleteOne({code: req.params.code});
+        const deleted = await Package.findOneAndDelete({code: req.params.code});
 
-        if(!result.deletedCount){
+        if(!deleted){
             return res.status(404).json({error: "Package not found"});
         }
 
-        return res.json({status: "success", result});
+        return res.json({status: "success", deletedUser: deleted});
     })
 
 
