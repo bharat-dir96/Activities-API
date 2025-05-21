@@ -1,9 +1,13 @@
 // File for cdatabase connection
+const dotenv = require("dotenv");
+
+dotenv.config();
+
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/Activities-DB');
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB Connected');
   } catch (err) {
     console.error('MongoDB Error:', err.message);

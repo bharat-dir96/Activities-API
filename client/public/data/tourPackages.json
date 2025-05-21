@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "VISIT TO THE LAKE DISTRICT OF UTTARAKHAND NAINITAL TOUR",
+    "duration": "2 Nights/3 Days",
+    "code": "NDH19",
+    "origin": "Delhi",
+    "destination": "Nainital",
+    "departure": "Every Thursday",
+    "price": "₹6990",
+    "image": "nainital.jpg"
+  },
+  {
+    "id": 2,
+    "title": "MAGICAL GOA ESCAPE",
+    "duration": "3 Nights/4 Days",
+    "code": "GOA22",
+    "origin": "Mumbai",
+    "destination": "Goa",
+    "departure": "Every Friday",
+    "price": "₹8990",
+    "image": "Goa image.jpg"
+  },
+
+  {
+    "id": 3,
+    "title": "BEAUTY OF HIMACHAL",
+    "duration": "6 Nights/7 Days",
+    "code": "WBR89",
+    "origin": "Bhopal",
+    "destination": "Delhi/Shimla/Manali/Chandigrah",
+    "departure": "Daily(Except Saturday)",
+    "price": "₹33300",
+    "image": "himachal.jpg"
+  }
+
+]
