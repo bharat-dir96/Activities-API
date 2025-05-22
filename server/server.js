@@ -1,6 +1,6 @@
 const express = require("express");
 const connectDB = require('./config/db');
-const packageRoutes = require('./routes/packageRoutes');
+const activityRoutes = require('./routes/activityRoutes');
 const cors =  require("cors");
 const path =  require("path");
 const dotenv = require("dotenv");
@@ -23,7 +23,7 @@ app.use(express.json({ extended: false }));
 
 
 // API Routes
-app.use('/api/packages', packageRoutes);
+app.use('/api/activities', activityRoutes);
 
 // Frontend Routes
 //For any frontend route not handled by API, return React's index.html
