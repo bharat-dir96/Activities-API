@@ -13,14 +13,32 @@ exports.getAllActivities = async (req,res) => {
         }
     };
 
-exports.createActivity = async (req,res) =>{
-        try{
-            const newactivity = await Activity.create(req.body);
-            return res.status(201).json({status: "Success", result: newactivity});
-        } catch(err) {
-            return res.status(400).json({ error: err.message})
-        }
-    };
+exports.createActivity = async (req, res) => {
+  try {
+    const data = req.body;
+
+    // Check if data is an array
+    if (Array.isArray(data)) {
+      const newActivities = await Activity.insertMany(data);
+      return res.status(201).json({
+        status: 'Success',
+        result: newActivities.length,
+        data: newActivities,
+      });
+    }
+
+    // If it's a single object
+    const newActivity = await Activity.create(data);
+    return res.status(201).json({
+      status: 'Success',
+      result: 1,
+      data: newActivity,
+    });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
 
 exports.getActivityByCode = async (req,res) => {
         const activity = await Activity.findOne({code: req.params.code});
