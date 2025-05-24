@@ -1,8 +1,16 @@
 const Activity = require('../models/Activity');
 
 exports.getAllActivities = async (req,res) => {
-        const allactivities = await Activity.find();
+    try{
+        const query = {}
+        if(req.query.location){
+            query.location = req.query.location;
+        }
+        const allactivities = await Activity.find(query);
         return res.json(allactivities);
+        } catch(err) {
+            return res.status(500).json({error: "Failed to fetch activities"});
+        }
     };
 
 exports.createActivity = async (req,res) =>{

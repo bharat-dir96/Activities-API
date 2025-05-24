@@ -28,15 +28,14 @@ const activitySchema = new mongoose.Schema(
             trim: true,
             minlength: [3, 'Duration must be descriptive (e.g., "1 Day", "15 Hours")']
         },
-        departure: {
-            type: String,
-            required: true,
-            trim: true,
-            minlength: [3, 'Departure must be descriptive (e.g., "Every Sunday")']
-        },
         upcoming_date: {
             type: Date,
             required: [true, 'Upcoming date is required'],
+            default: () => {
+                const date = new Date();
+                date.setDate(date.getDate() + 7);
+                return date;
+            },
             validate: {
                 // Ensures provided date is in future.
                 validator: function(value) {
@@ -65,10 +64,44 @@ const activitySchema = new mongoose.Schema(
                 message: props => `${props.value} is not a valid price. Must be greater than 0.`
             }
         },
-        image:{
+        image: {
             type: String,
             required: [true, 'Image path is required'],
             trim: true,
+        },
+        category: {
+            type: String,
+            required: [true, 'category is required'],
+            trim: true,
+            minlength: [10, 'Category must be at least 10 characters long']
+        },
+        free_cancellation: {
+            type: Boolean,
+            default: true,
+        },
+        review_score: {
+            type: Number,
+            min: 0,
+            max: 5,
+            required: [true, 'review score is required'],
+        },
+        time: {
+            type: String,
+            trim: true,
+            validate: {
+                validator: function (v) {
+                    return /^([01]\d|2[0-3]):?([0-5]\d)$/.test(v);  // Matches "HH:mm"
+                },
+                message: props => `${props.value} is not a valid time format (HH:mm)`
+            },
+            required: [true, 'time is required'],
+        },
+        language: {
+            type: String,
+            trim: true,
+            required: [true, 'language is required'],
+            default: "English",
+            minlength: [5, 'Language must be at least 5 characters long'],
         }
     }, {timestamps: true}
 );
