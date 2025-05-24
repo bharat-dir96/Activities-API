@@ -12,6 +12,9 @@ dotenv.config();
 const app = express();
 const Port = process.env.Port || 3000;
 
+// Connect to DB
+connectDB();
+
 const options = {
     definition: {
         openapi: '3.0.0',
@@ -23,26 +26,11 @@ const options = {
     apis: ['./routes/activityRoutes.js'], // or wherever your route files are
 };
 
+// API Documentation Route
 const specs = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-
-// Connect to DB
-connectDB();
-
-// This allows react app to run on different port to fetch API data without CORS Error.
-app.use(cors());
-
-// Middleware for parsing the body which is urlencoded and save it in req object.
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json({ extended: false }));
-
-
-// API Routes
-app.use('/api/activities', activityRoutes);
-
 // Frontend Routes
-//For any frontend route not handled by API, return React's index.html
 app.get('/',(req,res) => {
     const html = `
         <br>
@@ -60,13 +48,17 @@ app.get('/',(req,res) => {
     return res.send(html);
 })
 
-// Serve everything inside the dist folder at the root URL (/).
-// GET / → serves index.html
-// app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// // GET /packages → serves index.html
-// app.get("/packages", (req,res) => {
-//     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-// });
+// This allows react app to run on different port to fetch API data without CORS Error.
+app.use(cors());
+
+// Middleware for parsing the body which is urlencoded and save it in req object.
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ extended: false }));
+
+
+// API Routes
+app.use('/api/activities', activityRoutes);
+
 
 app.listen(Port,() => console.log("Server Started at Port:", Port));
