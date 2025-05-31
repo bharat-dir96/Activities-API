@@ -65,9 +65,14 @@ const activitySchema = new mongoose.Schema(
             }
         },
         image: {
-            type: String,
-            required: [true, 'Image path is required'],
-            trim: true,
+            type: [String],
+            required: [true, 'At least one image path is required'],
+            validate: {
+                validator: function (arr) {
+                    return Array.isArray(arr) && arr.length > 0 && arr.every(img => typeof img === 'string');
+                },
+                message: 'Image must be a non-empty array of strings'
+            }
         },
         category: {
             type: String,
