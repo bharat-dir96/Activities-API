@@ -1,7 +1,7 @@
 // File for defining the schemas for database collections
 const mongoose = require('mongoose');
 
-// Schema for the package data
+// Schema for the activity data
 const activitySchema = new mongoose.Schema(
     {
         title: {

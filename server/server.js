@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require('./config/db');
 const activityRoutes = require('./routes/activityRoutes');
+const userRoutes = require('./routes/userRoutes')
 const cors =  require("cors");
 const path =  require("path");
 const dotenv = require("dotenv");
@@ -59,6 +60,7 @@ app.use(express.json({ extended: false }));
 
 // API Routes
 app.use('/api/activities', activityRoutes);
+app.use('/api/users', userRoutes);
 
 
 app.listen(Port,() => console.log("Server Started at Port:", Port));
