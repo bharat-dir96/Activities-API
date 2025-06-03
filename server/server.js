@@ -24,7 +24,7 @@ const options = {
             version: '1.0.0',
         },
     },
-    apis: ['./routes/activityRoutes.js'], // or wherever your route files are
+    apis: ['./routes/activityRoutes.js', './routes/userRoutes.js'], // or wherever your route files are
 };
 
 // API Documentation Route

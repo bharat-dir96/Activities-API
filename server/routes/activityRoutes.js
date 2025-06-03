@@ -12,6 +12,12 @@ const {
 } = require('../controller/activityController');
 
 
+/**
+ * @swagger
+ * tags:
+ *   name: Activities
+ *   description: Activities management and operations
+ */
 
 // API Endpoints
 /**
