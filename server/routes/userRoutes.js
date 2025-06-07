@@ -6,9 +6,9 @@ const router = express.Router();
 const {
     getAllUsers,
     createUser,
-    getUserById,
-    updateUserById,
-    deleteUserById
+    getUserByAuthToken,
+    updateUserByAuthToken,
+    deleteUserByAuthToken
 } = require('../controller/userController');
 
 /**
@@ -65,17 +65,17 @@ router.post('/', createUser);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/{auth_token}:
  *   get:
- *     summary: Get a user by ID
+ *     summary: Get a user by auth token
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: auth_token
  *         schema:
  *           type: string
  *         required: true
- *         description: The MongoDB `_id` of the user
+ *         description: The unique auth_token of the user
  *     responses:
  *       200:
  *         description: Returns the user details
@@ -86,21 +86,21 @@ router.post('/', createUser);
  *       404:
  *         description: User not found
  */
-router.get('/:id', getUserById);
+router.get('/:auth_token', getUserByAuthToken);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/{auth_token}:
  *   patch:
- *     summary: Update a user by ID
+ *     summary: Update a user by auth token
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: auth_token
  *         required: true
  *         schema:
  *           type: string
- *         description: The MongoDB `_id` of the user to update
+ *         description: The unique auth_token of the user to update
  *     requestBody:
  *       required: true
  *       content:
@@ -125,27 +125,27 @@ router.get('/:id', getUserById);
  *       404:
  *         description: User not found
  */
-router.patch('/:id', updateUserById);
+router.patch('/:auth_token', updateUserByAuthToken);
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/users/{auth_token}:
  *   delete:
- *     summary: Delete a user by ID
+ *     summary: Delete a user by auth token
  *     tags: [Users]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: auth_token
  *         required: true
  *         schema:
  *           type: string
- *         description: The MongoDB `_id` of the user to delete
+ *         description: The unique auth token of the user to delete
  *     responses:
  *       200:
  *         description: User deleted successfully
  *       404:
  *         description: User not found
  */
-router.delete('/:id', deleteUserById);
+router.delete('/:auth_token', deleteUserByAuthToken);
 
 module.exports = router;

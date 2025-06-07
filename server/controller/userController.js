@@ -31,9 +31,9 @@ exports.createUser = async(req,res) => {
     }
 };
 
-exports.getUserById = async (req,res) => {
+exports.getUserByAuthToken = async (req,res) => {
     try{
-        const user = await User.findById(req.params.id);
+        const user = await User.findOne({auth_token : req.params.auth_token});
         if(!user){
             return res.status(404).json({error: "User not found"});
         }
@@ -44,9 +44,9 @@ exports.getUserById = async (req,res) => {
         
 };
 
-exports.updateUserById = async (req,res) =>{
+exports.updateUserByAuthToken = async (req,res) =>{
     try{
-        const updated = await User.findByIdAndUpdate(req.params.id, req.body, {
+        const updated = await User.findOneAndUpdate({auth_token: req.params.auth_token}, req.body, {
             new: true,
             runValidators: true,
         });
@@ -62,9 +62,9 @@ exports.updateUserById = async (req,res) =>{
         
 };
 
-exports.deleteUserById = async (req,res) =>{
+exports.deleteUserByAuthToken = async (req,res) =>{
     try{
-        const deleted = await User.findByIdAndDelete(req.params.id);
+        const deleted = await User.findOneAndDelete({auth_token: req.params.auth_token});
 
         if(!deleted){
             return res.status(404).json({error: "User not found"});
