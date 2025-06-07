@@ -5,8 +5,7 @@ const userRoutes = require('./routes/userRoutes')
 const cors =  require("cors");
 const path =  require("path");
 const dotenv = require("dotenv");
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsdoc = require("swagger-jsdoc");
+const { swaggerUi, specs } = require("./swagger");
 
 dotenv.config();
 
@@ -16,20 +15,7 @@ const Port = process.env.Port || 3000;
 // Connect to DB
 connectDB();
 
-const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'HCP Travels API',
-            version: '1.0.0',
-        },
-    },
-    apis: ['./routes/activityRoutes.js', './routes/userRoutes.js'], // or wherever your route files are
-};
-
-// API Documentation Route
-const specs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Frontend Routes
 app.get('/',(req,res) => {
@@ -55,7 +41,7 @@ app.use(cors());
 
 // Middleware for parsing the body which is urlencoded and save it in req object.
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json({ extended: false }));
+app.use(express.json());
 
 
 // API Routes
