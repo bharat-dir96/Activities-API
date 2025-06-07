@@ -37,7 +37,12 @@ const userSchema = new mongoose.Schema(
                 },
                 message: props => `${props.value} is not a valid phone number. It should include country code and 10-digit number (e.g. +919876543210).`,
             },
-        },       
+        },
+        auth_token: {
+            type: String,
+            required: true,
+            unique: true
+        }       
     },
     {timestamps: true}
 );

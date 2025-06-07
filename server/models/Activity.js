@@ -28,22 +28,6 @@ const activitySchema = new mongoose.Schema(
             trim: true,
             minlength: [3, 'Duration must be descriptive (e.g., "1 Day", "15 Hours")']
         },
-        upcoming_date: {
-            type: Date,
-            required: [true, 'Upcoming date is required'],
-            default: () => {
-                const date = new Date();
-                date.setDate(date.getDate() + 7);
-                return date;
-            },
-            validate: {
-                // Ensures provided date is in future.
-                validator: function(value) {
-                    return value >= new Date();
-                },
-                message: "Upcoming date must be today or in the future."
-            }
-        },
         code: {
             type: String,
             required: [true, 'Package code is required'],
@@ -59,7 +43,7 @@ const activitySchema = new mongoose.Schema(
                 validator: function (v) {
                     // Extract numeric part and ensure it's greater than 0
                     const numericValue = parseFloat(v.toString().replace(/[^0-9.]/g, ''));
-                    return !isNaN(numericValue) && numericValue > 0;
+                    return !isNaN(numericValue) && numericValue >= 0;
                 },
                 message: props => `${props.value} is not a valid price. Must be greater than 0.`
             }
@@ -74,39 +58,72 @@ const activitySchema = new mongoose.Schema(
                 message: 'Image must be a non-empty array of strings'
             }
         },
-        category: {
-            type: String,
-            required: [true, 'category is required'],
-            trim: true,
-            minlength: [10, 'Category must be at least 10 characters long']
-        },
-        free_cancellation: {
-            type: Boolean,
-            default: true,
-        },
         review_score: {
             type: Number,
             min: 0,
             max: 5,
             required: [true, 'review score is required'],
         },
-        time: {
-            type: String,
-            trim: true,
+        free_cancellation: {
+            type: Boolean,
+            required: true,
+        },
+        group_discount: {
+            type: Boolean,
+            required: true,
+        },
+        included: {
+            type: [String],
+            required: [true, 'At Least one service is required.'],
+        },
+        not_included: {
+            type: [String],
+        },
+        additional_info: {
+            type: [String],
+            required: [true, 'At Least one additional info is required.'],
+        },
+        category: {
+            type: [String],
+            required: [true, 'At least one category is required'],
             validate: {
-                validator: function (v) {
-                    return /^([01]\d|2[0-3]):?([0-5]\d)$/.test(v);  // Matches "HH:mm"
+                validator: function (arr) {
+                    return (
+                        Array.isArray(arr) &&
+                        arr.length > 0 &&
+                        arr.every((val) => typeof val === 'string' && val.trim().length >= 10)
+                    );
                 },
-                message: props => `${props.value} is not a valid time format (HH:mm)`
+                message: 'Each category must be a trimmed string of at least 10 characters'
+            }
+        },
+        time: {
+            type: [String],
+            required: [true, 'At least one time value is required'],
+            validate: {
+                validator: function (arr) {
+                    return (
+                        Array.isArray(arr) &&
+                        arr.length > 0 &&
+                        arr.every((val) => /^([01]\d|2[0-3]):?([0-5]\d)$/.test(val)) // Matches "HH:mm"
+                    );
+                },
+                message: "Each time must be in a valid time format (HH:mm)"
             },
-            required: [true, 'time is required'],
         },
         language: {
-            type: String,
-            trim: true,
-            required: [true, 'language is required'],
-            default: "English",
-            minlength: [5, 'Language must be at least 5 characters long'],
+            type: [String],
+            required: [true, 'At least one language is required'],
+            validate: {
+                validator: function (arr) {
+                    return (
+                        Array.isArray(arr) &&
+                        arr.length > 0 &&
+                        arr.every((val) => typeof val === 'string' && val.trim().length >= 5)
+                    );
+                },
+                message: 'Each language must be a trimmed string of at least 5 characters'
+            }
         }
     }, {timestamps: true}
 );

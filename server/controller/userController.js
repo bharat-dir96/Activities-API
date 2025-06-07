@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const User = require(`../models/User`);
 
 exports.getAllUsers = async(req, res) => {
@@ -11,7 +12,15 @@ exports.getAllUsers = async(req, res) => {
 
 exports.createUser = async(req,res) => {
     try{
+        // Generate a secure random token
+        const authToken = crypto.randomBytes(32).toString('hex');
+        
+        // Attach token to the request body
+        req.body.auth_token = authToken;
+
+        // Create new user
         const newUser = await User.create(req.body);
+
         return res.status(201).json({
             status: "Success",
             result: 1,
