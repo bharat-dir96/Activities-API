@@ -2,15 +2,33 @@ const express = require("express");
 const connectDB = require('./config/db');
 const activityRoutes = require('./routes/activityRoutes');
 const userRoutes = require('./routes/userRoutes')
+const userDataRoutes = require('./routes/userDataRoutes');
+const authRoutes = require('./routes/authRoutes');
 const cors =  require("cors");
-const path =  require("path");
 const dotenv = require("dotenv");
 const { swaggerUi, specs } = require("./swagger");
+const passport = require("passport");
+const session = require("express-session");
 
 dotenv.config();
 
+require("./config/passportConfig")(passport);
+
 const app = express();
 const Port = process.env.Port || 3000;
+
+// Session middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Connect to DB
 connectDB();
@@ -47,6 +65,9 @@ app.use(express.json());
 // API Routes
 app.use('/api/activities', activityRoutes);
 app.use('/api/users', userRoutes);
+app.use("/auth", userDataRoutes); // Gmail login routes
+app.use("/auth", authRoutes); // Google auth routes
+
 
 
 app.listen(Port,() => console.log("Server Started at Port:", Port));
