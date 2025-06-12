@@ -9,7 +9,8 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback",
+        callbackURL:
+          "https://activities-api-w8vb.onrender.com/auth/google/callback",
         scope: ["profile", "email"],
         passReqToCallback: true,
       },
