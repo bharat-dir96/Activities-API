@@ -1,10 +1,11 @@
 const express = require("express");
-const connectDB = require('./config/db');
-const activityRoutes = require('./routes/activityRoutes');
-const userRoutes = require('./routes/userRoutes')
-const userDataRoutes = require('./routes/userDataRoutes');
-const authRoutes = require('./routes/authRoutes');
-const cors =  require("cors");
+const connectDB = require("./config/db");
+const activityRoutes = require("./routes/activityRoutes");
+const userRoutes = require("./routes/userRoutes");
+const userDataRoutes = require("./routes/userDataRoutes");
+const authRoutes = require("./routes/authRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const cors = require("cors");
 const dotenv = require("dotenv");
 const { swaggerUi, specs } = require("./swagger");
 const passport = require("passport");
@@ -36,8 +37,8 @@ connectDB();
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Frontend Routes
-app.get('/',(req,res) => {
-    const html = `
+app.get("/", (req, res) => {
+  const html = `
         <br>
         <div style="text-align:center; font-size:25px;">
             <h1>API Endpoints: </h1>
@@ -50,9 +51,8 @@ app.get('/',(req,res) => {
             </ul>
         </div>
     `;
-    return res.send(html);
-})
-
+  return res.send(html);
+});
 
 // This allows react app to run on different port to fetch API data without CORS Error.
 app.use(cors());
@@ -61,13 +61,11 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-
 // API Routes
-app.use('/api/activities', activityRoutes);
-app.use('/api/users', userRoutes);
+app.use("/api/activities", activityRoutes);
+app.use("/api/users", userRoutes);
 app.use("/auth", userDataRoutes); // Gmail login routes
 app.use("/auth", authRoutes); // Google auth routes
+app.use("/api/payments", paymentRoutes);
 
-
-
-app.listen(Port,() => console.log("Server Started at Port:", Port));
+app.listen(Port, () => console.log("Server Started at Port:", Port));
