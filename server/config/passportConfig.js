@@ -1,7 +1,8 @@
 // config/passport.config.js
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const UserModel = require("../models/UserData");
+const UserModel = require("../models/User");
+const crypto = require("crypto");
 
 module.exports = function (passport) {
   passport.use(
@@ -18,10 +19,9 @@ module.exports = function (passport) {
         try {
           // Extract email and name from profile
           const email = profile.emails[0].value;
-          const username = profile.displayName || `user-${Date.now()}`;
 
+          let user = await UserModel.findOne({ email_address: email });
           // Check if user exists
-          let user = await UserModel.findOne({ email });
 
           if (user) {
             // Update existing user with Google ID
@@ -30,15 +30,14 @@ module.exports = function (passport) {
             return done(null, user);
           }
 
+          // Create token
+          const authToken = crypto.randomBytes(32).toString("hex");
+
           // Create new user
           const newUser = new UserModel({
-            email,
-            username,
-            // username: profile.displayName,
+            email_address: email,
             googleId: profile.id,
-            password: "google-auth", // Dummy password
-            role: "user",
-            verified: true,
+            auth_token: authToken,
           });
 
           await newUser.save();

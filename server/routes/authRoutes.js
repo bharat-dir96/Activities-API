@@ -3,6 +3,7 @@ const express = require("express");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+const UserModel = require("../models/User");
 
 // Google OAuth redirect
 router.get(
@@ -20,35 +21,28 @@ router.get(
     session: false,
     failureRedirect: `${
       process.env.CLIENT_URL || "http://localhost:5173"
-    }/login?error=oauth_failed`,
+    }/email`,
   }),
   (req, res) => {
     try {
       const user = req.user;
 
-      // Generate JWT
-      const token = jwt.sign(
-        {
-          id: user._id,
-          email: user.email,
-          username: user.username,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" }
-      );
+      if (!user || !user.auth_token) {
+        throw new Error("User not found or missing auth_token");
+      }
+
+      console.log("user Data:", user);
 
       // Redirect with token
       res.redirect(
         `${
           process.env.CLIENT_URL || "http://localhost:5173"
-        }/login-success?token=${token}`
+        }/login-success?token=${user.auth_token}`
       );
     } catch (error) {
       console.error("OAuth callback error:", error);
       res.redirect(
-        `${
-          process.env.CLIENT_URL || "http://localhost:5173"
-        }/login?error=server_error`
+        `${process.env.CLIENT_URL || "http://localhost:5173"}/email`
       );
     }
   }

@@ -16,7 +16,7 @@ const loginUserValidation = Joi.object({
     .required(),
 });
 
-const sendResetPasswordOtpValidation = Joi.object({
+const sendResetPasswordEmailValidation = Joi.object({
   email: Joi.string().email().required(),
 });
 
@@ -28,6 +28,6 @@ const verifyOtpValidation = Joi.object({
 module.exports = {
   registerUserValidation,
   loginUserValidation,
-  sendResetPasswordOtpValidation,
+  sendResetPasswordEmailValidation,
   verifyOtpValidation,
 };
