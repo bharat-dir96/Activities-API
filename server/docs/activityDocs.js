@@ -33,6 +33,9 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 500
+ *               message: Internal server error
  */
 
 /**
@@ -47,25 +50,32 @@
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Activity'
- *           example:
- *             title: "City Tour"
- *             location: "Bangalore"
- *             description: "A comprehensive city tour."
- *             duration: "3 hours"
- *             code: "CTB001"
- *             price: 1500
- *             image: ["url1.jpg", "url2.jpg"]
- *             category: ["Tour", "Sightseeing"]
- *             review_score: 4.5
- *             time: ["9:00 AM", "2:00 PM"]
- *             language: ["English", "Hindi"]
  *     responses:
  *       201:
- *         description: Activity created
+ *         description: Activity created successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Activity'
+ *       400:
+ *         description: Bad request — validation or body structure failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 400
+ *               message: Invalid request body or missing required fields
+
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 500
+ *               message: Internal server error
  */
 
 /**
@@ -94,6 +104,18 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 404
+ *               message: Activity not found
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 500
+ *               message: Internal server error
  */
 
 /**
@@ -113,24 +135,12 @@
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               category:
- *                 type: array
- *                 items:
- *                   type: string
- *               free_cancellation:
- *                 type: boolean
- *               review_score:
- *                 type: number
- *               time:
- *                 type: array
- *                 items:
- *                   type: string
- *               language:
- *                 type: array
- *                 items:
- *                   type: string
+ *              $ref: '#/components/schemas/Activity'
+ *           example:
+ *              duration: "5 Hours"
+ *              price: 1000
+ *              image: ["https://raw.githubusercontent.com/HCPTravels/API-Images/main/Images/Jaipur/JAIP001/JAIP001-01.jpg", "https://raw.githubusercontent.com/HCPTravels/API-Images/main/Images/Jaipur/JAIP001/JAIP001-02.jpg", "https://raw.githubusercontent.com/HCPTravels/API-Images/main/Images/Jaipur/JAIP001/JAIP001-03.jpg"]
+ *              time: ["09:00", "10:30", "12:00", "14:00", "15:00"]
  *     responses:
  *       200:
  *         description: Updated
@@ -144,6 +154,27 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 404
+ *               message: Activity not found
+ *       400:
+ *         description: Bad request — validation or body structure failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 400
+ *               message: Invalid request body or missing required fields
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 500
+ *               message: Internal server error
  */
 
 /**
@@ -175,4 +206,16 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 404
+ *               message: Activity not found
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               status: 500
+ *               message: Internal server error
  */

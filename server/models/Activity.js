@@ -86,6 +86,7 @@ const activitySchema = new mongoose.Schema(
     },
     not_included: {
       type: [String],
+      required: [true, "At Least one non-service is required."],
     },
     additional_info: {
       type: [String],
