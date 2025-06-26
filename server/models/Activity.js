@@ -86,7 +86,6 @@ const activitySchema = new mongoose.Schema(
     },
     not_included: {
       type: [String],
-      required: [true, "At Least one non-service is required."],
     },
     additional_info: {
       type: [String],
@@ -117,7 +116,10 @@ const activitySchema = new mongoose.Schema(
           return (
             Array.isArray(arr) &&
             arr.length > 0 &&
-            arr.every((val) => /^([01]\d|2[0-3]):?([0-5]\d)$/.test(val)) // Matches "HH:mm"
+            arr.every(
+              (val) =>
+                /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i.test(val.trim()) // Matches "HH:mm"
+            )
           );
         },
         message: "Each time must be in a valid time format (HH:mm)",
