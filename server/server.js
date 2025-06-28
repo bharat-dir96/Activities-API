@@ -4,6 +4,7 @@ const activityRoutes = require("./routes/activityRoutes");
 const userRoutes = require("./routes/userRoutes");
 const userDataRoutes = require("./routes/userDataRoutes");
 const authRoutes = require("./routes/authRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -66,6 +67,7 @@ app.use("/api/activities", activityRoutes);
 app.use("/api/users", userRoutes);
 app.use("/auth", userDataRoutes); // Gmail login routes
 app.use("/auth", authRoutes); // Google auth routes
+app.use("/api/bookings", bookingRoutes);
 app.use("/api/payments", paymentRoutes);
 
 app.listen(Port, () => console.log("Server Started at Port:", Port));

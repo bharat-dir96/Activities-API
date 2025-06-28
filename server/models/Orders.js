@@ -7,6 +7,14 @@ const OrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId, // or String, if you don't use ObjectId
       required: true,
     },
+    userEmail: {
+      type: String,
+      required: true,
+    },
+    bookingId: {
+      type: mongoose.Schema.Types.ObjectId, // Reference to the Booking model
+      required: true,
+    },
     razorpayOrderId: {
       type: String,
       required: true,

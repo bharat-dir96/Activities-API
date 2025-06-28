@@ -7,9 +7,11 @@ exports.getAllActivities = async (req, res) => {
       query.location = req.query.location;
     }
     const allactivities = await Activity.find(query);
-    return res.json(allactivities);
+    return res.status(200).json(allactivities);
   } catch (err) {
-    return res.status(500).json({ error: "Failed to fetch activities" });
+    return res
+      .status(500)
+      .json({ error: "Server error: Failed to fetch activities" });
   }
 };
 
@@ -35,38 +37,64 @@ exports.createActivity = async (req, res) => {
       data: newActivity,
     });
   } catch (err) {
-    return res.status(400).json({ error: err.message });
+    if (err.name === "ValidationError") {
+      return res.status(400).json({ error: err.message });
+    }
+    return res
+      .status(500)
+      .json({ error: "Server error: Failed to create activity" });
   }
 };
 
 exports.getActivityByCode = async (req, res) => {
-  const activity = await Activity.findOne({ code: req.params.code });
-  if (!activity) {
-    return res.status(404).json({ error: "Activity not found" });
+  try {
+    const activity = await Activity.findOne({ code: req.params.code });
+    if (!activity) {
+      return res.status(404).json({ error: "Activity not found" });
+    }
+    return res.status(200).json(activity);
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ error: "Server error: Failed to fetch activity" });
   }
-  return res.json(activity);
 };
 
 exports.updateActivityByCode = async (req, res) => {
-  const updated = await Activity.findOneAndUpdate(
-    { code: req.params.code },
-    { $set: req.body },
-    { new: true }
-  );
+  try {
+    const updated = await Activity.findOneAndUpdate(
+      { code: req.params.code },
+      { $set: req.body },
+      { new: true }
+    );
 
-  if (!updated) {
-    return res.status(404).json({ error: "Package not found" });
+    if (!updated) {
+      return res.status(404).json({ error: "Package not found" });
+    }
+
+    return res.status(200).json({ status: "success", updated: updated });
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      return res.status(400).json({ error: err.message });
+    }
+    return res
+      .status(500)
+      .json({ error: "Server error: Failed to update activity" });
   }
-
-  return res.status(200).json({ status: "success", updated: updated });
 };
 
 exports.deleteActivityByCode = async (req, res) => {
-  const deleted = await Activity.findOneAndDelete({ code: req.params.code });
+  try {
+    const deleted = await Activity.findOneAndDelete({ code: req.params.code });
 
-  if (!deleted) {
-    return res.status(404).json({ error: "Package not found" });
+    if (!deleted) {
+      return res.status(404).json({ error: "Package not found" });
+    }
+
+    return res.status(200).json({ status: "success", deletedUser: deleted });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ error: "Server error: Failed to delete activity" });
   }
-
-  return res.json({ status: "success", deletedUser: deleted });
 };
