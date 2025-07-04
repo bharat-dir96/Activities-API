@@ -16,11 +16,17 @@ const activitySchema = new mongoose.Schema(
       trim: true,
       minlength: [3, "Location must be at least 3 characters long"],
     },
+    short_description: {
+      type: String,
+      required: [true, "Short description is required"],
+      trim: true,
+      minlength: [20, "Short description must be at least 20 characters long"],
+    },
     description: {
       type: String,
       required: [true, "Description is required"],
       trim: true,
-      minlength: [50, "Description must be at least 50 characters long"],
+      minlength: [500, "Description must be at least 500 characters long"],
     },
     duration: {
       type: String,
