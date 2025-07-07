@@ -18,6 +18,7 @@ require("./config/passportConfig")(passport);
 
 const app = express();
 const Port = process.env.Port || 3000;
+const apiKeyAuth = require("./middleware/apikeyAuth");
 
 // Session middleware
 app.use(
@@ -62,10 +63,12 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use("/api/", apiKeyAuth); // Apply API key authentication middleware to all API routes
+
 // API Routes
 app.use("/api/activities", activityRoutes);
 app.use("/api/users", userRoutes);
-app.use("/auth", userDataRoutes); // Gmail login routes
+app.use("/api/email", userDataRoutes); // Gmail login routes
 app.use("/auth", authRoutes); // Google auth routes
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/payments", paymentRoutes);

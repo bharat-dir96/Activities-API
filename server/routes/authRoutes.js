@@ -8,6 +8,13 @@ const UserModel = require("../models/User");
 // Google OAuth redirect
 router.get(
   "/google",
+  (req, res, next) => {
+    const apiKey = req.query.apikey; // Access apikey from query params
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+      return res.status(401).json({ error: "Invalid or missing API key" });
+    }
+    next();
+  },
   passport.authenticate("google", {
     scope: ["profile", "email"],
     session: false,
