@@ -11,6 +11,7 @@ const dotenv = require("dotenv");
 const { swaggerUi, specs } = require("./swagger");
 const passport = require("passport");
 const session = require("express-session");
+const apiKeyAuth = require("./middleware/apiKeyAuth");
 
 dotenv.config();
 
@@ -18,7 +19,6 @@ require("./config/passportConfig")(passport);
 
 const app = express();
 const Port = process.env.Port || 3000;
-const apiKeyAuth = require("./middleware/apikeyAuth");
 
 // Session middleware
 app.use(
